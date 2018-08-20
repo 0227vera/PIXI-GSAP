@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script>
+    </script>
+    <style>
+        :root {
+            --bg-color: seagreen;
+            --primary-clr: black;
+            --secondary-clr: white;
+            --base-ff: 'Source Sans Pro', sans-serif;
+            --h2-fs: 2.25rem;
+            --pad: 2rem;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            min-height: 100vh;
+            font-family: var(--base-ff);
+        }
+
+        .grid__item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 100%;
+            width: 50vw;
+            height: 50vh;
+            padding: var(--pad);
+            background-color: var(--bg-color);
+        }
+
+        @media (min-width: 600px) {
+            .grid__item {
+                flex: 1 0 50%;
+            }
+        }
+
+        .grid__item:nth-child(even) {
+            background-color: #36a265;
+        }
+
+        .grid__item:nth-child(3n) {
+            background-color: #2b8352;
+        }
+
+        .grid__item:nth-child(4n) {
+            background-color: #38aa6a;
+        }
+
+        .grid__item:nth-child(5n) {
+            background-color: #267449;
+        }
+
+        h2 {
+            font-size: var(--h2-fs);
+            text-align: center;
+            color: var(--primary-clr);
+        }
+
+        .letter-wrap {
+            display: inline-block;
+            position: relative;
+        }
+
+        .letter-wrap * {
+            pointer-events: none;
+        }
+
+        .letter-wrap__word {
+            display: inline-flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-wrap__char {
+            display: inline-block;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .letter-wrap__char-inner {
+            display: inline-block;
+        }
+
+        .letter-wrap__char-inner:after {
+            content: attr(data-letter);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            color: var(--secondary-clr);
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="grid">
+        <li class="grid__item">
+            <h2 class="letter-wrap">Hello world</h2>
+        </li>
+        <li class="grid__item">
+            <h2 class="letter-wrap" data-duration="0.4" data-stagger="0.1">Good morning</h2>
+        </li>
+        <li class="grid__item">
+            <h2 class="letter-wrap" data-duration="0.2" data-stagger="-0.05">Great days are coming</h2>
+        </li>
+        <li class="grid__item">
+            <h2 class="letter-wrap" data-duration="0.1" data-stagger="0.1">Live for tomorrow</h2>
+        </li>
+        <li class="grid__item">
+            <h2 class="letter-wrap" data-stagger="-0.015">Roll with the punches</h2>
+        </li>
+        <li class="grid__item">
+            <h2 class="letter-wrap" data-duration="1" data-stagger="0.025">Have a blast</h2>
+        </li>
+        <li class="grid__item">
+            <h2 class="letter-wrap" data-duration="0.8" data-stagger="-0.025">Bet on black</h2>
+        </li>
+        <li class="grid__item">
+            <h2 class="letter-wrap" data-duration="0.1" data-stagger="-0.075">Tuck and roll</h2>
+        </li>
+    </ul>
+</body>
+
+</html>
