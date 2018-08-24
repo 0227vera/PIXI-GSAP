@@ -45,7 +45,7 @@ $('.img3').attr('src', img3);
     options.autoPlaySpeed = options.hasOwnProperty('autoPlaySpeed') ? options.autoPlaySpeed : [10, 3];
     options.fullScreen = options.hasOwnProperty('fullScreen') ? options.fullScreen : true;
     options.displaceScale = options.hasOwnProperty('displaceScale') ? options.displaceScale : [200, 70];
-    options.displacementImage = options.hasOwnProperty('displacementImage') ? options.displacementImage : '';
+    options.displacementImage =options.hasOwnProperty('displacementImage') ? options.displacementImage : '';
     options.navElement = options.hasOwnProperty('navElement') ? options.navElement : document.querySelectorAll('.scene-nav');
     options.displaceAutoFit = options.hasOwnProperty('displaceAutoFit') ? options.displaceAutoFit : false;
     options.wacky = options.hasOwnProperty('wacky') ? options.wacky : false;
@@ -55,7 +55,7 @@ $('.img3').attr('src', img3);
     options.displacementCenter = options.hasOwnProperty('displacementCenter') ? options.displacementCenter : false;
     options.dispatchPointerOver = options.hasOwnProperty('dispatchPointerOver') ? options.dispatchPointerOver : false;
 
-    console.log('是否允许交互--------------->', options.interactive);
+
     //  创建一个渲染器 给定宽高 背景是透明的（默认值是0X000000） 创建的是一个canvas标签 
     var renderer = new PIXI.autoDetectRenderer(options.stageWidth, options.stageHeight, {
       transparent: true
@@ -65,7 +65,8 @@ $('.img3').attr('src', img3);
     // 这个是滑动容器
     var slidesContainer = new PIXI.Container();
     // 获取雪碧图（材质）init需要传参进入默认值是空
-    var displacementSprite = new PIXI.Sprite.fromImage(options.displacementImage);
+    var displacementSprite = new PIXI.Sprite.fromImage(options.displacementArr[2]);
+
 
     // filtes添加一个过滤器  DisplacementFilter 使用纹理中的指定像素来替换displacementFilter这个对象
     var displacementFilter = new PIXI.filters.DisplacementFilter(displacementSprite);
@@ -168,7 +169,6 @@ $('.img3').attr('src', img3);
         var image = new PIXI.Sprite(texture);
 
         if (rTexts) {
-          console.log('---------->', rTexts)
           var richText = new PIXI.Text(rTexts[i], style);
           image.addChild(richText);
           richText.anchor.set(0.5);
@@ -209,13 +209,12 @@ $('.img3').attr('src', img3);
       ticker.autoStart = options.autoPlay;
 
       ticker.add(delta => {
-
         displacementSprite.x += options.autoPlaySpeed[0] * delta;
         displacementSprite.y += options.autoPlaySpeed[1];
 
         displacementSprite.x += 2.14 * delta;
         displacementSprite.y += 22.24 * delta;
-        // displacementSprite.rotation.x += 20.3;
+        displacementSprite.rotation += 20.3 * delta;
 
         renderer.render(stage);
 
@@ -243,14 +242,14 @@ $('.img3').attr('src', img3);
     transitionAnimation.add(function (delta) {
       displacementSprite.x += 2.14 * delta;
       displacementSprite.y += 22.24 * delta;
-      console.log('----------->', 20.3 * delta);
-      // displacementSprite.rotation.x += 20.3 * delta;
+      displacementSprite.rotation += 20.3 * delta;
     });
 
 
     var isPlaying = false;
     var slideImages = slidesContainer.children;
     self.currentIndex = 0;
+    // 切换状态
     this.moveSlider = function (newIndex = self.currentIndex) {
 
       isPlaying = true;
@@ -266,7 +265,6 @@ $('.img3').attr('src', img3);
           }
         },
         onUpdate: function () {
-
           if (options.wacky === true) {
             displacementSprite.rotation += baseTimeline.progress() * 0.02;
             displacementSprite.scale.set(baseTimeline.progress() * 3);
@@ -332,7 +330,7 @@ $('.img3').attr('src', img3);
           if (self.currentIndex > 0 && self.currentIndex < slideImages.length) {
             self.moveSlider(self.currentIndex - 1);
           } else {
-            self.moveSlider(spriteImages.length - 1);
+            self.moveSlider(spriteImagesSrc.length - 1);
           }
 
         }
@@ -385,7 +383,7 @@ $('.img3').attr('src', img3);
 
       // HOVER
       if (options.interactionEvent === 'hover' || options.interactionEvent === 'both') {
-        // 鼠标进入container 手指滑动
+        // 鼠标进入container 手指滑动进去的那一瞬间
         slidesContainer.pointerover = function (mouseData) {
           mouseX = mouseData.data.global.x;
           mouseY = mouseData.data.global.y;
@@ -395,9 +393,20 @@ $('.img3').attr('src', img3);
           });
           rotateSpite();
         };
+        // 鼠标进入container 手指滑动每一时刻，显然是包括pointerover的
+        // slidesContainer.pointermove = function (mouseData) {
+        //   mouseX = mouseData.data.global.x;
+        //   mouseY = mouseData.data.global.y;
+        //   // displacementFilter.scale.x = mouseX;
+        //   // displacementFilter.scale.y = mouseY;
+        //   TweenMax.to(displacementFilter.scale, 1, {
+        //     x: "+=" + Math.sin(mouseX) * 100 + "",
+        //     y: "+=" + Math.cos(mouseY) * 100 + ""
+        //   });
+        //   rotateSpite();
+        // };
         // 鼠标离开container 手指滑动结束并离开
         slidesContainer.pointerout = function (mouseData) {
-          console.log('---------->', '离开的事件');
           if (options.dispatchPointerOver === true) {
             TweenMax.to(displacementFilter.scale, 1, {
               x: 0,
@@ -405,23 +414,16 @@ $('.img3').attr('src', img3);
               onComplete: function () {
                 TweenMax.to(displacementFilter.scale, 1, {
                   x: 20,
-                  y: 20,
-                  onComplete: () => {
-                    transitionAnimation.start();
-                  }
+                  y: 20
                 });
               }
             });
           } else {
             TweenMax.to(displacementFilter.scale, 1, {
               x: 0,
-              y: 0,
-              onComplete: () => {
-                transitionAnimation.start();
-              }
+              y: 0
             });
-            // cancelAnimationFrame(rafID);
-
+            cancelAnimationFrame(rafID);
           }
 
         };
@@ -430,7 +432,7 @@ $('.img3').attr('src', img3);
 
       // CLICK
       if (options.interactionEvent === 'click' || options.interactionEvent === 'both') {
-        // console.log('---------->', '抬起的事件');
+        // 抬起的事件
         slidesContainer.pointerup = function (mouseData) {
           if (options.dispatchPointerOver === true) {
             TweenMax.to(displacementFilter.scale, 1, {
@@ -439,28 +441,22 @@ $('.img3').attr('src', img3);
               onComplete: function () {
                 TweenMax.to(displacementFilter.scale, 1, {
                   x: 20,
-                  y: 20,
-                  onComplete: () => {
-                    transitionAnimation.start();
-                  }
+                  y: 20
                 });
               }
             });
           } else {
             TweenMax.to(displacementFilter.scale, 1, {
               x: 0,
-              y: 0,
-              onComplete: () => {
-                transitionAnimation.start();
-              }
+              y: 0
             });
-            // cancelAnimationFrame(rafID);
+            cancelAnimationFrame(rafID);
             // self.moveSlider();
 
           }
 
         };
-        // console.log('---------->', '按下的事件');
+        // 按下的事件
         slidesContainer.pointerdown = function (mouseData) {
           mouseX = mouseData.data.global.x;
           mouseY = mouseData.data.global.y;
@@ -469,8 +465,6 @@ $('.img3').attr('src', img3);
             y: "+=" + Math.cos(mouseY) * 200 + ""
           });
         };
-
-
       }
 
     }
@@ -585,14 +579,18 @@ imagesLoaded(document.body, () => document.body.classList.remove('loading'));
 var spriteImagesSrc = [img1, img2, img3];
 // for (var i = 0; i < spriteImages.length; i++) {
 //     var img = spriteImages[i];
-//     console.log(img);
 //     spriteImagesSrc.push(img.attr('src'));
 // }
-
+let arr0 = require('../img/dmaps/2048x2048/ripple.jpg');
+let arr1 = require('../img/dmaps/2048x2048/ripple_2.jpg');
+let arr2 = require('../img/dmaps/2048x2048/clouds.jpg');
+let arr3 = require('../img/dmaps/2048x2048/fibers.jpg');
+let arr4 = require('../img/dmaps/2048x2048/pointilize.jpg');
 
 var initCanvasSlideshow = new CanvasSlideshow({
   sprites: spriteImagesSrc,
   displacementImage: clouds,
+  displacementArr: [arr0, arr1, arr2, arr3, arr4],
   autoPlay: true,
   autoPlaySpeed: [10, 3],
   displaceScale: [200, 70],
@@ -600,5 +598,6 @@ var initCanvasSlideshow = new CanvasSlideshow({
   autoPlay: true,
   interactive: true,
   interactionEvent: 'both',
-  dispatchPointerOver: 'true',
+  dispatchPointerOver: true,
+  centerSprites: true,
 });

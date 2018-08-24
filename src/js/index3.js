@@ -1,3 +1,28 @@
+
+let type = "WebGL";
+// 创建pixi应用
+let Application = PIXI.Application;
+if (!PIXI.utils.isWebGLSupported()) {
+    type = "canvas"
+}
+PIXI.utils.sayHello(type);
+let app = new Application({
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight,
+    backgroundColor: 0xEEEEEE,
+    antialias: true,
+    resolution: 1
+});
+window.app = app;
+document.body.appendChild(app.view);
+
+
+
+
+
+
+
+
 // 纹理，材质，图像 // 化整为零在拼接 主要来讲就相当于自己切图 但这个的技术含量会高很多
 let roc = require('../img/roc.png');
 

@@ -1,0 +1,54 @@
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    p {
+        position: absolute;
+        padding: 5px 10px;
+        border: solid 1px transparent;
+        background: rgba(238, 238, 238, 0.2);
+        border-radius: 4px;
+        left: 10px;
+        cursor: pointer;
+        &:hover {
+            border: solid 1px rgba(204, 33, 176, 1);
+        }
+        position: absolute;
+        overflow: hidden;
+        .cricle {
+            border: solid 1px #eee;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            border-radius: 5px;
+            transform-origin: center center; 
+        }
+    }
+    ul {
+        float: left;
+        overflow: hidden;
+        padding-left: 0;
+        margin-left: 10px;
+        margin-right: 10px;
+        li {
+            position: absolute;
+            list-style: none;
+            float: left;
+            display: block;
+            opacity: 0;
+            padding: 5px 10px;
+            cursor: pointer;
+            background: rgba(238, 238, 238, 0.2);
+            left:-75px;
+            border: solid 1px transparent;
+            border-radius: 4px;
+            &:hover {
+                border: solid 1px rgba(204, 33, 176, 1);
+            }
+        }
+    }
+}

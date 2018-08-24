@@ -15,14 +15,13 @@
 
 
 import TweenMax from "gsap";
+
 import imagesLoaded from "imagesLoaded";
 let $ = require('jquery');
 let img1 = require('../img/4.jpg');
 let img2 = require('../img/5.jpg');
 let img3 = require('../img/6.jpg');
-$('.img1').attr('src', img1);
-$('.img2').attr('src', img2);
-$('.img3').attr('src', img3);
+
 
 (function () {
 

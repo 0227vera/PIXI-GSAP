@@ -27,29 +27,30 @@ let pluginsArr = [
         PIXI: "pixi.js",
         jQuery: "jquery",
         imagesloaded: 'imagesloaded',
+        TweenMax: 'gsap',
         "window.jQuery": "jquery"
     }),
 
     // 压缩js代码
-    new uglifyjsWebpackPlugin(),
+    // new uglifyjsWebpackPlugin(),
 
     new ExtractTextPlugin({ //提取css
         filename: 'css/[name]._[hash].css',
         disable: false,
         allChunks: true
     }),
-
     // 热加载
     new webpack.HotModuleReplacementPlugin(),
 
     //打包公共js
+
     new webpack.optimize.CommonsChunkPlugin({
         name: ['common'],
-        name: 'common',
         chunks: ['./src/common'],
         minChunks: 1,
         minChunks: Infinity
     }),
+
     // new webpack.HashedModuleIdsPlugin(),
 
     //自动打开浏览器
@@ -58,14 +59,13 @@ let pluginsArr = [
     })
 ];
 entryObj.forEach((item, index) => {
-    console.log("----------->", item);
     let obj = {
         filename: item + '.html',
         titile: 'PIXI-' + item,
         template: item + '.html',
         chunks: ['common', item], //html需要引入的js
         chunksSortMode: 'manual', // js按照手动排序
-        cache: true, //只有在内容变化时才会生成新的html
+        // cache: true, //只有在内容变化时才会生成新的html
         minify: {
             removeComments: true, //是否压缩时 去除注释
             collapseWhitespace: false
@@ -77,6 +77,7 @@ entryObj.forEach((item, index) => {
 
 });
 
+console.log('----------->', entry)
 const config = {
     entry: entry,
     // { //入口
@@ -92,7 +93,7 @@ const config = {
     devServer: { //服务
         contentBase: 'dist',
         host: 'localhost',
-        // hot: true,
+        hot: true,
         // open: true,
         inline: true,
         // progress: true,//显示打包速度
@@ -120,12 +121,16 @@ const config = {
                     use: ['css-loader']
                 })
             },
-            { //js loader
-                test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
-                use: {
-                    loader: 'babel-loader'
-                }
+            {
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [{
+                        loader: "css-loader"
+                    }, {
+                        loader: "sass-loader"
+                    }]
+                })
             },
             { // img 压缩，，生成hash值
                 test: /\.(png|svg|jpg|gif)$/,
@@ -135,27 +140,47 @@ const config = {
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/,
                 use: ['file-loader']
-            },
-            { //引用jquery
-                test: require.resolve('jquery'),
-                use: [{
-                    loader: 'expose-loader',
-                    options: 'jQuery'
-                }, {
-                    loader: 'expose-loader',
-                    options: '$'
-                }]
             }
+            // {
+            //     test: /\.css$/,
+            //     use: ['style-loader', 'css-loader']
+            // },
+            // {
+            //     test: /\.scss$/,
+            //     use: ['style-loader', 'css-loader', 'sass-loader'],
+            // },
+
+            // { //js loader
+            //     test: /\.js$/,
+            //     exclude: /(node_modules|bower_components)/,
+            //     use: {
+            //         loader: 'babel-loader'
+            //     }
+            // },
+
+
+            // ,
+            // { //引用jquery
+            //     test: require.resolve('jquery'),
+            //     use: [{
+            //         loader: 'expose-loader',
+            //         options: 'jQuery'
+            //     }, {
+            //         loader: 'expose-loader',
+            //         options: '$'
+            //     }]
+            // }
         ]
     },
     devtool: 'cheap-module-eval-source-map',
-    plugins: pluginsArr,
-    externals: {
-        PIXI: "pixi.js",
-        jQuery: "jquery",
-        imagesloaded: 'imagesloaded',
-        "window.jQuery": "jquery"
-    }
+    plugins: pluginsArr
+    // ,
+    // externals: {
+    //     PIXI: "pixi.js",
+    //     jQuery: "jquery",
+    //     imagesloaded: 'imagesloaded',
+    //     "window.jQuery": "jquery"
+    // }
 };
 
 module.exports = config;

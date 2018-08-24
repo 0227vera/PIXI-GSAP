@@ -14,6 +14,7 @@
 }
 
 
+require('../css/index.css');
 import TweenMax from "gsap";
 import imagesLoaded from "imagesLoaded";
 let $ = require('jquery');
@@ -23,6 +24,7 @@ let img3 = require('../img/3.jpg');
 $('.img1').attr('src', img1);
 $('.img2').attr('src', img2);
 $('.img3').attr('src', img3);
+
 
 let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 (function () {
@@ -580,3 +582,71 @@ var initCanvasSlideshow = new CanvasSlideshow({
     autoPlaySpeed: [10, 3],
     displaceScale: [200, 70]
 });
+
+
+
+let animateArr = $('.animate');
+let animateBackArr = $('.animate1');
+let jian = 6;
+let count = 0;
+let type = 'go';
+
+function animatePlay() {
+    if (animateArr && animateArr.length != 0) {
+        TweenMax.to(animateArr, .15, {
+            left: 75 * count + 10,
+            onComplete: () => {
+                count++;
+                animateArr.splice(0, 1);
+                animatePlay();
+                if (animateArr.length == 1) {
+                    type = 'back';
+                    TweenMax.to($('#clickme'), 1, {
+                        opacity: 1,
+                    });
+                }
+            }
+        });
+        TweenMax.to(animateArr[0], .5, {
+            opacity: 1
+        })
+    } else {
+        animateArr = $('.animate');
+        count = 0;
+    }
+}
+$('#clickme').click(() => {
+    if (type == 'go') {
+        TweenMax.to($('#clickme'), 0.5, {
+            opacity: 0,
+            onComplete: () => {
+                $('#rota').html('&lt;&lt;');
+                animatePlay();
+            }
+        });
+    } else {
+        TweenMax.to($('#clickme'), 0.5, {
+            opacity: 0,
+            onComplete: () => {
+                $('#rota').html('&gt;&gt;');
+                animateBack();
+                $('#clickme').css({
+                    left: 10
+                });
+            }
+        });
+    }
+});
+
+function animateBack() {
+    TweenMax.to(animateBackArr, 1, {
+        left: -10,
+        opacity: 0,
+        onComplete: () => {
+            type = 'go';
+            TweenMax.to($('#clickme'), 0.2, {
+                opacity: 1,
+            });
+        }
+    });
+}
