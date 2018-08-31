@@ -2,6 +2,7 @@ import {
     TweenMax
 } from 'gsap';
 
+
 // 使用原生的方法获取
 const letterWrapClass = 'letter-wrap';
 const letterWrapElements = document.getElementsByClassName(letterWrapClass);
@@ -48,7 +49,7 @@ function letterAnimation(el, cls) {
     // 每个字动画的时间
     const duration = el.hasAttribute('data-duration') ? el.dataset.duration : 0.3;
     // 每个字之间的间隔
-    const stagger = el.hasAttribute('data-stagger') ? el.dataset.stagger : 0.03; 
+    const stagger = el.hasAttribute('data-stagger') ? el.dataset.stagger : 0.03;
 
     // 几种不同的速度方式
 

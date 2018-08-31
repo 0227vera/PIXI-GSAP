@@ -9,11 +9,28 @@ let app = new Application({
     width: document.documentElement.clientWidth,
     height: document.documentElement.clientHeight,
     backgroundColor: 0xEEEEEE,
-    antialias: true,
-    resolution: 1
+    
+   
 });
 window.app = app;
 document.body.appendChild(app.view);
+
+// // 图片处理的容器
+// let imgCon = new PIXI.Container({
+//     width: 500,
+//     height: 300,
+//     backgroundColor: 0x000000
+// });
+// imgCon.width = 500;
+// imgCon.height = 300;
+// imgCon.backgroundColor = '0x000000';
+// imgCon.interactive = true;
+// imgCon.cursor = 'move';
+// let img = PIXI.Texture.fromImage(require('../img/dog.png'));
+// let img1 = PIXI.Texture.fromImage(require('../img/cat.png'));
+// let sprite = new PIXI.Sprite(img);
+// let sprite1 = new PIXI.Sprite(img1);
+// app.stage.addChild(imgCon);
 
 
 
@@ -61,11 +78,11 @@ thing.lineStyle(0);
 //设置遮罩层属性后，将会隐藏，只有赋值该属性的对象区域能显示
 // bgFront.mask = thing;
 
-var r = 0;
-app.ticker.add(function () {
-    r += 10;
-    thing.clear();
-    thing.beginFill(0x8bc5ff, 0.4);
-    thing.drawCircle(0, 0, r);
-    thing.lineStyle(1);
-});
+// var r = 0;
+// app.ticker.add(function () {
+//     r += 10;
+//     thing.clear();
+//     thing.beginFill(0x8bc5ff, 0.4);
+//     thing.drawCircle(0, 0, r);
+//     thing.lineStyle(1);
+// });

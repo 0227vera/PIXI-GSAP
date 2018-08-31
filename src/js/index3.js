@@ -1,82 +1,59 @@
+let renderer = new PIXI.autoDetectRenderer(
+    {
+        width: 256,
+        height: 256,
+        antialias: false, // 抗锯齿 ，平滑字体和图片的边缘 目前只有Chrome支持此属性
+        backgroundColor: 0xce71e3,
+    }
 
-let type = "WebGL";
-// 创建pixi应用
-let Application = PIXI.Application;
-if (!PIXI.utils.isWebGLSupported()) {
-    type = "canvas"
-}
-PIXI.utils.sayHello(type);
-let app = new Application({
-    width: document.documentElement.clientWidth,
-    height: document.documentElement.clientHeight,
-    backgroundColor: 0xEEEEEE,
-    antialias: true,
-    resolution: 1
-});
-window.app = app;
-document.body.appendChild(app.view);
+);
+// 会生成一个定好的长宽等属性的的canvas的显示屏 renderer.view.width||height 可以获取渲染器的宽高 对于渲染器的尺寸大小，
+//自适应 
+renderer.view.style.position = 'absolute';
+renderer.view.style.display = 'block';
+renderer.autoResize = true;
+renderer.resize(document.documentElement.clientWidth, document.documentElement.clientHeight);
 
+document.body.appendChild(renderer.view);
 
+// 以上是对人的renderer 的一些基本的设置 也就是渲染器目前就是按照自己的设置已经创造出来
 
-
-
-
-
-
-// 纹理，材质，图像 // 化整为零在拼接 主要来讲就相当于自己切图 但这个的技术含量会高很多
-let roc = require('../img/roc.png');
-
-import TweenMax from 'gsap';
-
-// 方便引入图片
-let TextureCache = PIXI.utils.TextureCache,
-    // 加载器
-    loader = PIXI.loader,
-    // 资源
-    resources = PIXI.loader.resources,
-    // 精灵
-    Sprite = PIXI.Sprite;
-
-
-
-
-
-let root = app.stage;
-loader
-    .add([roc])
-    .on('progress', loadProgressHandler)
+PIXI.loader
+    .add([require('../img/dog.png'), require('../img/cat.png')])
     .load(setup);
 
-
 function setup() {
-    let texture = TextureCache[roc];
-    let rectangle = new PIXI.Rectangle(32 * 3, 32 * 2, 32, 32);
-    // Rectangle(x, y, width, height);
-    texture.frame = rectangle; // 可以理解texture是一帧从texture上面选取的一帧
-    texture.x = 600;
-    texture.y = 400;
-    // texture.scale.x = 2;
-    // texture.scale.y = 2 
-    let rocSprite = new Sprite(texture);
-    let Con = new PIXI.Container(rocSprite);
-    // Con.addChild(rocSprite);
-    root.addChild(rocSprite);
-    // root.addChild(dogSprite);
+    let stage = new PIXI.Container();
+    // 图片处理的容器
+    let imgCon = new PIXI.Container();
+    imgCon.backgroundColor = '0x000000';
+    imgCon.interactive = true;
+    imgCon.cursor = 'move';
+    let img = PIXI.Texture.fromImage(require('../img/dog.png'));
+    let img1 = PIXI.Texture.fromImage(require('../img/cat.png'));
+    let sprite = new PIXI.Sprite(img);
+    let sprite1 = new PIXI.Sprite(img1);
+    sprite.y = 20;
+    sprite.x = 10;
+    sprite1.x = sprite.width + sprite.x;
+    sprite1.y = (sprite.height - sprite1.height) / 2 + sprite.y;
+    imgCon.addChild(sprite);
+
+    imgCon.addChild(sprite1)
+    stage.addChild(imgCon);
+  
+    imgCon.on('mousedown', (e) => {
+        imgCon.on('mousemove', () => {
+            console.log(22);
+
+        })
+    })
+    imgCon.on('mouseup', () => {
+        imgCon.on('mousemove', () => {
+
+        })
+    })
+    // 文字处理的容器
+    renderer.render(stage);
 }
-
-
-function loadProgressHandler(loader, resource) {
-    console.log('loading');
-
-    console.log("loading: " + resource.url);
-    console.log("progress: " + loader.progress + "%");
-    if (loader.progress == 50) {
-        console.log(root.Con);
-    }
-}
-
-
-
-
-//  可以拿到任何已经存在canvas上面的纹理
-// let base = new PIXI.BaseTexture(anyImageObject);
+// renderer 是异步加载的 如果不用load的话，会在图片还没有加载的时候就已经渲染一次了

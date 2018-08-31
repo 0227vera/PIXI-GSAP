@@ -78,7 +78,7 @@ let img3 = require('../img/6.jpg');
       wordWrap: true,
       wordWrapWidth: 400,
       letterSpacing: 20,
-      fontSize: 14
+      fontSize: 30
     });
 
 
@@ -572,5 +572,14 @@ var initCanvasSlideshow = new CanvasSlideshow({
   displacementImage: clouds,
   autoPlay: true,
   autoPlaySpeed: [10, 3],
-  displaceScale: [200, 70]
+  displaceScale: [200, 70],
+  displaceAutoFit: true,
+
+
+
+  texts: ['水母', '海星', '毛腿'],
+  interactive: true,
+  interactionEvent: 'click',
+  dispatchPointerOver: true,
+  centerSprites: true,
 });

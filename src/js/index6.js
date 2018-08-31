@@ -30,17 +30,7 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 (function () {
 
     window.CanvasSlideshow = function (options) {
-
-
-
-        //  SCOPE
-        /// ---------------------------      
-        var that = this;
-
-
-
-        //  OPTIONS
-        /// ---------------------------      
+        var self = this;
         options = options || {};
         options.stageWidth = options.hasOwnProperty('stageWidth') ? options.stageWidth : 1920;
         options.stageHeight = options.hasOwnProperty('stageHeight') ? options.stageHeight : 1080;
@@ -63,56 +53,41 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
         options.dispatchPointerOver = options.hasOwnProperty('dispatchPointerOver') ? options.dispatchPointerOver : false;
 
 
-
-        //  PIXI VARIABLES
-        /// ---------------------------    
         var renderer = new PIXI.autoDetectRenderer(options.stageWidth, options.stageHeight, {
             transparent: true
         });
         var stage = new PIXI.Container();
         var slidesContainer = new PIXI.Container();
         var displacementSprite = new PIXI.Sprite.fromImage(options.displacementImage);
+
         var displacementFilter = new PIXI.filters.DisplacementFilter(displacementSprite);
 
 
 
-        //  TEXTS
-        /// ---------------------------    
         var style = new PIXI.TextStyle({
             fill: options.textColor,
             wordWrap: true,
             wordWrapWidth: 400,
             letterSpacing: 20,
-            fontSize: 14
+            fontSize: 30
         });
 
 
 
-        //  SLIDES ARRAY INDEX
-        /// ---------------------------    
         this.currentIndex = 0;
 
-
-
-        /// ---------------------------
-        //  INITIALISE PIXI
-        /// ---------------------------      
         this.initPixi = function () {
 
-            // Add canvas to the HTML
             document.body.appendChild(renderer.view);
 
 
-            // Add child container to the main container 
             stage.addChild(slidesContainer);
 
 
-            // Enable Interactions
             stage.interactive = true;
 
-            console.warn(renderer.view.style);
+            console.log(renderer.view.style);
 
-            // Fit renderer to the screen
             if (options.fullScreen === true) {
                 renderer.view.style.objectFit = 'cover';
                 renderer.view.style.width = '100%';
@@ -132,8 +107,6 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
             displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
 
-
-            // Set the filter to stage and set some default values for the animation
             stage.filters = [displacementFilter];
 
             if (options.autoPlay === false) {
@@ -151,18 +124,12 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
             displacementSprite.scale.x = 2;
             displacementSprite.scale.y = 2;
 
-            // PIXI tries to fit the filter bounding box to the renderer so we optionally bypass
             displacementFilter.autoFit = options.displaceAutoFit;
 
             stage.addChild(displacementSprite);
 
         };
 
-
-
-        /// ---------------------------
-        //  LOAD SLIDES TO CANVAS
-        /// ---------------------------          
         this.loadPixiSprites = function (sprites) {
 
 
@@ -180,7 +147,7 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
                     richText.anchor.set(0.5);
                     richText.x = image.width / 2;
-                    richText.y = image.height / 2;
+                    richText.y = 400;
                 }
 
                 if (options.centerSprites === true) {
@@ -188,8 +155,6 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
                     image.x = renderer.width / 2;
                     image.y = renderer.height / 2;
                 }
-                // image.transform.scale.x = 1.3;
-                // image.transform.scale.y = 1.3;
 
 
 
@@ -207,9 +172,7 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
 
 
-        /// ---------------------------
-        //  DEFAULT RENDER/ANIMATION
-        /// ---------------------------        
+
         if (options.autoPlay === true) {
 
             var ticker = new PIXI.ticker.Ticker();
@@ -217,7 +180,6 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
             ticker.autoStart = options.autoPlay;
 
             ticker.add(function (delta) {
-
                 displacementSprite.x += options.autoPlaySpeed[0] * delta;
                 displacementSprite.y += options.autoPlaySpeed[1];
 
@@ -238,9 +200,7 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
         }
 
 
-        /// ---------------------------
-        //  TRANSITION BETWEEN SLIDES
-        /// ---------------------------    
+
         var isPlaying = false;
         var slideImages = slidesContainer.children;
         this.moveSlider = function (newIndex) {
@@ -250,7 +210,7 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
             var baseTimeline = new TimelineMax({
                 onComplete: function () {
-                    that.currentIndex = newIndex;
+                    self.currentIndex = newIndex;
                     isPlaying = false;
                     if (options.wacky === true) {
                         displacementSprite.scale.set(1);
@@ -277,7 +237,7 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
                     x: options.displaceScale[0],
                     y: options.displaceScale[1]
                 })
-                .to(slideImages[that.currentIndex], 0.5, {
+                .to(slideImages[self.currentIndex], 0.5, {
                     alpha: 0
                 })
                 .to(slideImages[newIndex], 0.5, {
@@ -292,9 +252,7 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
 
 
-        /// ---------------------------
-        //  CLICK HANDLERS
-        /// ---------------------------         
+
         var nav = options.navElement;
 
         for (var i = 0; i < nav.length; i++) {
@@ -310,18 +268,18 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
                 if (this.getAttribute('data-nav') === 'next') {
 
-                    if (that.currentIndex >= 0 && that.currentIndex < slideImages.length - 1) {
-                        that.moveSlider(that.currentIndex + 1);
+                    if (self.currentIndex >= 0 && self.currentIndex < slideImages.length - 1) {
+                        self.moveSlider(self.currentIndex + 1);
                     } else {
-                        that.moveSlider(0);
+                        self.moveSlider(0);
                     }
 
                 } else {
 
-                    if (that.currentIndex > 0 && that.currentIndex < slideImages.length) {
-                        that.moveSlider(that.currentIndex - 1);
+                    if (self.currentIndex > 0 && self.currentIndex < slideImages.length) {
+                        self.moveSlider(self.currentIndex - 1);
                     } else {
-                        that.moveSlider(spriteImages.length - 1);
+                        self.moveSlider(spriteImages.length - 1);
                     }
 
                 }
@@ -334,34 +292,18 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
 
 
-        /// ---------------------------
-        //  INIT FUNCTIONS
-        /// ---------------------------    
 
         this.init = function () {
 
 
-            that.initPixi();
-            that.loadPixiSprites(options.pixiSprites);
-
-            /*
-            if ( options.fullScreen === true ) {
-              window.addEventListener("resize", function( event ){ 
-                scaleToWindow( renderer.view );
-              });
-              scaleToWindow( renderer.view );  
-            }
-            */
-
-
+            self.initPixi();
+            self.loadPixiSprites(options.pixiSprites);
         };
 
 
 
 
-        /// ---------------------------
-        //  INTERACTIONS
-        /// ---------------------------
+
         function rotateSpite() {
             displacementSprite.rotation += 0.001;
             rafID = requestAnimationFrame(rotateSpite);
@@ -458,103 +400,13 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
         }
 
-
-        /// ---------------------------
-        //  CENTER DISPLACEMENT
-        /// ---------------------------
         if (options.displacementCenter === true) {
             displacementSprite.anchor.set(0.5);
             displacementSprite.x = renderer.view.width / 2;
             displacementSprite.y = renderer.view.height / 2;
         }
 
-
-        /// ---------------------------
-        //  START 
-        /// ---------------------------           
         this.init();
-
-
-        /// ---------------------------
-        //  HELPER FUNCTIONS
-        /// ---------------------------
-        function scaleToWindow(canvas, backgroundColor) {
-            var scaleX, scaleY, scale, center;
-
-            //1. Scale the canvas to the correct size
-            //Figure out the scale amount on each axis
-            scaleX = window.innerWidth / canvas.offsetWidth;
-            scaleY = window.innerHeight / canvas.offsetHeight;
-
-            //Scale the canvas based on whichever value is less: `scaleX` or `scaleY`
-            scale = Math.min(scaleX, scaleY);
-            canvas.style.transformOrigin = "0 0";
-            canvas.style.transform = "scale(" + scale + ")";
-
-            //2. Center the canvas.
-            //Decide whether to center the canvas vertically or horizontally.
-            //Wide canvases should be centered vertically, and 
-            //square or tall canvases should be centered horizontally
-            if (canvas.offsetWidth > canvas.offsetHeight) {
-                if (canvas.offsetWidth * scale < window.innerWidth) {
-                    center = "horizontally";
-                } else {
-                    center = "vertically";
-                }
-            } else {
-                if (canvas.offsetHeight * scale < window.innerHeight) {
-                    center = "vertically";
-                } else {
-                    center = "horizontally";
-                }
-            }
-
-            //Center horizontally (for square or tall canvases)
-            var margin;
-            if (center === "horizontally") {
-                margin = (window.innerWidth - canvas.offsetWidth * scale) / 2;
-                canvas.style.marginTop = 0 + "px";
-                canvas.style.marginBottom = 0 + "px";
-                canvas.style.marginLeft = margin + "px";
-                canvas.style.marginRight = margin + "px";
-            }
-
-            //Center vertically (for wide canvases) 
-            if (center === "vertically") {
-                margin = (window.innerHeight - canvas.offsetHeight * scale) / 2;
-                canvas.style.marginTop = margin + "px";
-                canvas.style.marginBottom = margin + "px";
-                canvas.style.marginLeft = 0 + "px";
-                canvas.style.marginRight = 0 + "px";
-            }
-
-            //3. Remove any padding from the canvas  and body and set the canvas
-            //display style to "block"
-            canvas.style.paddingLeft = 0 + "px";
-            canvas.style.paddingRight = 0 + "px";
-            canvas.style.paddingTop = 0 + "px";
-            canvas.style.paddingBottom = 0 + "px";
-            canvas.style.display = "block";
-
-            //4. Set the color of the HTML body background
-            document.body.style.backgroundColor = backgroundColor;
-
-            //Fix some quirkiness in scaling for Safari
-            var ua = navigator.userAgent.toLowerCase();
-            if (ua.indexOf("safari") != -1) {
-                if (ua.indexOf("chrome") > -1) {
-                    // Chrome
-                } else {
-                    // Safari
-                    //canvas.style.maxHeight = "100%";
-                    //canvas.style.minHeight = "100%";
-                }
-            }
-
-            //5. Return the `scale` value. This is important, because you'll nee this value 
-            //for correct hit testing between the pointer and sprites
-            return scale;
-        } // http://bit.ly/2y1Yk2k      
 
 
     };
@@ -563,24 +415,25 @@ let clouds = require('../img/dmaps/2048x2048/clouds.jpg');
 
 imagesLoaded(document.body, () => document.body.classList.remove('loading'));
 
-// var spriteImages = $('.slide-item');
-
 
 
 var spriteImagesSrc = [img1, img2, img3];
-// for (var i = 0; i < spriteImages.length; i++) {
-//     var img = spriteImages[i];
-//     console.log(img);
-//     spriteImagesSrc.push(img.attr('src'));
-// }
-
 
 var initCanvasSlideshow = new CanvasSlideshow({
     sprites: spriteImagesSrc,
     displacementImage: clouds,
     autoPlay: true,
     autoPlaySpeed: [10, 3],
-    displaceScale: [200, 70]
+    displaceScale: [200, 70],
+    displaceAutoFit: true,
+
+
+
+    texts: ['水母', '海星', '毛腿'],
+    interactive: true,
+    interactionEvent: 'hover',
+    dispatchPointerOver: true,
+    centerSprites: true,
 });
 
 

@@ -133,8 +133,8 @@ $('.img3').attr('src', img3);
 
       //  根据默认值不一样设置一些不同的默认动画
       if (options.autoPlay === false) {
-        displacementFilter.scale.x = 0;
-        displacementFilter.scale.y = 0;
+        displacementFilter.scale.x = 1;
+        displacementFilter.scale.y = 1;
       }
 
       if (options.wacky === true) {
@@ -592,8 +592,8 @@ var initCanvasSlideshow = new CanvasSlideshow({
   displacementImage: clouds,
   displacementArr: [arr0, arr1, arr2, arr3, arr4],
   autoPlay: true,
-  autoPlaySpeed: [10, 3],
-  displaceScale: [200, 70],
+  autoPlaySpeed: [100, 3],
+  displaceScale: [1000, 70],
   texts: ['这是第一个精灵', '这是第二个精灵', '这是第三个精灵'],
   autoPlay: true,
   interactive: true,

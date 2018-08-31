@@ -93,3 +93,114 @@ function createLine(obj = {
         root.addChild(line);
     }
 }
+
+
+
+
+
+
+
+
+
+
+// // let type = "WebGL";
+// // // 创建pixi应用
+// // let Application = PIXI.Application;
+// // if (!PIXI.utils.isWebGLSupported()) {
+// //     type = "canvas"
+// // }
+// // PIXI.utils.sayHello(type);
+// // let app = new Application({
+// //     width: document.documentElement.clientWidth,
+// //     height: document.documentElement.clientHeight,
+// //     backgroundColor: 0xEEEEEE,
+// //     antialias: true,
+// //     resolution: 1
+// // });
+// // window.app = app;
+// // document.body.appendChild(app.view);
+
+
+
+
+
+
+
+
+// // // 纹理，材质，图像 // 化整为零在拼接 主要来讲就相当于自己切图 但这个的技术含量会高很多
+// // let roc = require('../img/roc.png');
+
+// // import TweenMax from 'gsap';
+
+// // // 方便引入图片
+// // let TextureCache = PIXI.utils.TextureCache,
+// //     // 加载器
+// //     loader = PIXI.loader,
+// //     // 资源
+// //     resources = PIXI.loader.resources,
+// //     // 精灵
+// //     Sprite = PIXI.Sprite;
+
+
+
+
+
+// // let root = app.stage;
+// // loader
+// //     .add([roc])
+// //     .on('progress', loadProgressHandler)
+// //     .load(setup);
+
+
+// // function setup() {
+// //     let texture = TextureCache[roc];
+// //     let rectangle = new PIXI.Rectangle(32 * 3, 32 * 2, 32, 32);
+// //     // Rectangle(x, y, width, height);
+// //     texture.frame = rectangle; // 可以理解texture是一帧从texture上面选取的一帧
+// //     texture.x = 600;
+// //     texture.y = 400;
+// //     // texture.scale.x = 2;
+// //     // texture.scale.y = 2 
+// //     let rocSprite = new Sprite(texture);
+// //     let Con = new PIXI.Container(rocSprite);
+// //     // Con.addChild(rocSprite);
+// //     root.addChild(rocSprite);
+// //     // root.addChild(dogSprite);
+// // }
+
+
+// // function loadProgressHandler(loader, resource) {
+// //     console.log('loading');
+
+// //     console.log("loading: " + resource.url);
+// //     console.log("progress: " + loader.progress + "%");
+// //     if (loader.progress == 50) {
+// //         console.log(root.Con);
+// //     }
+// // }
+
+
+
+
+// // //  可以拿到任何已经存在canvas上面的纹理
+// // // let base = new PIXI.BaseTexture(anyImageObject);
+
+
+
+
+
+
+
+// const app = new PIXI.Application();
+
+// // Draw a green rectangle
+// const rect = new PIXI.Graphics()
+//     .beginFill(0x00ff00)
+//     .drawRect(40, 40, 200, 200);
+
+// // Add a blur filter
+// rect.filters = [new PIXI.filters.BlurFilter()];
+
+// // Display rectangle
+// app.stage.addChild(rect);
+// document.body.appendChild(app.view);

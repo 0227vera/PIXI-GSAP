@@ -55,7 +55,7 @@ let pluginsArr = [
 
     //自动打开浏览器
     new OpenBrowserPlugin({
-        url: 'http://localhost:3000/index1.html'
+        url: 'http://localhost:3000/index5.html'
     })
 ];
 entryObj.forEach((item, index) => {
