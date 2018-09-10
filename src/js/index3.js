@@ -1,3 +1,5 @@
+import TweenMax from "gasp"
+import { TimelineMax } from "gsap";
 let renderer = new PIXI.autoDetectRenderer(
     {
         width: 256,
@@ -16,14 +18,17 @@ renderer.resize(document.documentElement.clientWidth, document.documentElement.c
 
 document.body.appendChild(renderer.view);
 
+
 // 以上是对人的renderer 的一些基本的设置 也就是渲染器目前就是按照自己的设置已经创造出来
 
 PIXI.loader
-    .add([require('../img/dog.png'), require('../img/cat.png')])
+    .add([require('../img/dog.png'), require('../img/cat.png'),('../img/roc.png')])
     .load(setup);
 
 function setup() {
     let stage = new PIXI.Container();
+    window.b = stage;
+
     // 图片处理的容器
     let imgCon = new PIXI.Container();
     imgCon.backgroundColor = '0x000000';
@@ -42,18 +47,55 @@ function setup() {
     imgCon.addChild(sprite1)
     stage.addChild(imgCon);
   
-    imgCon.on('mousedown', (e) => {
-        imgCon.on('mousemove', () => {
-            console.log(22);
-
-        })
-    })
-    imgCon.on('mouseup', () => {
-        imgCon.on('mousemove', () => {
-
-        })
-    })
+    
     // 文字处理的容器
-    renderer.render(stage);
+    let style = {
+        fontFamily:'Arial',
+        fontSize:30,
+        fill:0xFFFFFF,
+        align:'center'
+    };
+    let text = new PIXI.Text ('pixi加载文字的效果和样式改变', style);
+    let conText = new PIXI.Container();
+    conText.y = 20;
+    conText.x = imgCon.width + imgCon.x;
+    conText.addChild(text);
+    stage.addChild(conText);
+
+    imgCon.x = 200;
+    imgCon.y = 200;
+
+    // tween动画
+    sprite1.x = sprite.x - sprite1.width;
+    sprite1.y = sprite.y - sprite1.height;
+    
+    let t =new TimelineMax();
+    function playAni(){
+        t.to(sprite1, 1, {x:sprite.x + sprite.width, alpha:.5})
+        .to(sprite1, 1, {y:sprite.y + sprite.height, alpha:0})
+        .to(sprite1, 1, {x:sprite.x - sprite1.width, alpha:.5})
+        .to(sprite1, 1, {y:sprite.y - sprite1.height, alpha:1,onComplete:()=>{
+            playAni();
+        }});
+        t.play();
+    }
+    playAni();
+
+    // mask 
+    let MM = new PIXI.Graphics(); // 画图的过程是异步
+    MM.lineStyle(0);
+    MM.beginFill(0x10ea55,1);
+    MM.drawCircle(200,200,50);
+    MM.endFill();
+    stage.addChild(MM);
+
+    sprite1.mask = MM;
+    
+
+    
+
+    setInterval(()=>{
+        renderer.render(stage);
+    },10);
 }
 // renderer 是异步加载的 如果不用load的话，会在图片还没有加载的时候就已经渲染一次了
