@@ -89,7 +89,7 @@ function setup() {
     MM.endFill();
     stage.addChild(MM);
 
-    sprite1.mask = MM;
+    // sprite1.mask = MM;
     
 
     

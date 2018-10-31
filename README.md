@@ -1,4 +1,4 @@
-## 这里使用的及时是PIXI，webpack，nodeJS，TweenMax
+## 这里使用的技术是PIXI，webpack，nodeJS，TweenMax
 ## 这就是一个自己做的玩的项目，想能够增长一点点技术
 ## 如果是自己搭建项目
 
