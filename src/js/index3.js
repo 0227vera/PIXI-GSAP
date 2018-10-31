@@ -22,7 +22,7 @@ document.body.appendChild(renderer.view);
 // 以上是对人的renderer 的一些基本的设置 也就是渲染器目前就是按照自己的设置已经创造出来
 
 PIXI.loader
-    .add([require('../img/dog.png'), require('../img/cat.png'),('../img/roc.png')])
+    .add([require('../img/dog.png'), require('../img/cat.png'),require('../img/roc.png')])
     .load(setup);
 
 function setup() {
@@ -70,6 +70,7 @@ function setup() {
     sprite1.y = sprite.y - sprite1.height;
     
     let t =new TimelineMax();
+    // TweenMax在做分段循环的时候，函数的自调用是一种非常好的解决方法
     function playAni(){
         t.to(sprite1, 1, {x:sprite.x + sprite.width, alpha:.5})
         .to(sprite1, 1, {y:sprite.y + sprite.height, alpha:0})
@@ -83,9 +84,11 @@ function setup() {
 
     // mask 
     let MM = new PIXI.Graphics(); // 画图的过程是异步
-    MM.lineStyle(0);
-    MM.beginFill(0x10ea55,1);
-    MM.drawCircle(200,200,50);
+
+    // 画圆的过程和原生的canvas是一样的，所以在canvas上面能用的方法在PIXI上面是可以用的
+    MM.lineStyle(0);    // 线的粗细
+    MM.beginFill(0x10ea55,1);   // 用什么颜色去填充和透明度是多少
+    MM.drawCircle(200,200,50);  //  圆的坐标原点和半径 
     MM.endFill();
     stage.addChild(MM);
 
@@ -98,4 +101,4 @@ function setup() {
         renderer.render(stage);
     },10);
 }
-// renderer 是异步加载的 如果不用load的话，会在图片还没有加载的时候就已经渲染一次了
+// renderer 是异步加载的 如果不用load的话，会在图片还没有加载的时候就已经渲染一次了 每一次renderer只会渲染一次 所以会给个计时器让他一直渲染
